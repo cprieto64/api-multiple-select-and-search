@@ -1,64 +1,70 @@
 class API {
-     constructor(apikey) {
-          this.apikey = apikey;
+     constructor() {
+          // API key is not required for the public Kitsu endpoints used in this project.
+          // If an API key were needed, it would be initialized here.
      }
-     // obtener todas las monedas
-     async obtenerMonedasAPI() {
+
+     // get all categories
+     async getCategoriesAPI() {
           const url = `https://kitsu.io/api/edge/categories`;
-
-          // fetch a la api
-          const urlObtenerMonedas = await fetch(url);
-
-          // respuesta en json
-          const monedas = await urlObtenerMonedas.json();
-          
-          return {
-               monedas
+          try {
+               const response = await fetch(url);
+               if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText} (status: ${response.status})`);
+               }
+               const categoriesData = await response.json();
+               return categoriesData.data; // Adjusted to return categoriesData.data
+          } catch (error) {
+               console.error('Failed to get categories:', error);
+               throw error; // Re-throw to be handled by the caller
           }
      }
 
-
-     async obtenerCategoria(cat) {
-          
-          const url = `https://kitsu.io/api/edge/anime?filter[categories]=${cat}`;
-
-          // consultar en rest api
-          const urlConvertir = await fetch(url);
-
-          const resultado = await urlConvertir.json(); 
-          //console.log(resultado);
-          
-          return {
-               resultado
+     // get animes by category slug
+     async getAnimesByCategory(categorySlug) {
+          const url = `https://kitsu.io/api/edge/anime?filter[categories]=${categorySlug}`;
+          try {
+               const response = await fetch(url);
+               if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText} (status: ${response.status})`);
+               }
+               const animesData = await response.json();
+               return animesData.data; // Adjusted to return animesData.data
+          } catch (error) {
+               console.error(`Failed to get animes for category ${categorySlug}:`, error);
+               throw error; // Re-throw to be handled by the caller
           }
      }
 
-
-     async obtenerValores(criptomoneda) {
-          const url = `https://kitsu.io/api/edge/anime/${criptomoneda}`;
-
-          // consultar en rest api
-          const urlConvertir = await fetch(url);
-
-          const resultado = await urlConvertir.json();
-
-          return {
-               resultado
+     // get a specific anime by its ID
+     async getAnimeById(animeId) {
+          const url = `https://kitsu.io/api/edge/anime/${animeId}`;
+          try {
+               const response = await fetch(url);
+               if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText} (status: ${response.status})`);
+               }
+               const animeData = await response.json();
+               return animeData.data; // Adjusted to return animeData.data
+          } catch (error) {
+               console.error(`Failed to get anime by ID ${animeId}:`, error);
+               throw error; // Re-throw to be handled by the caller
           }
      }
 
-     async obtenerAnime(criptomoneda) {
-          const url = `https://kitsu.io/api/edge/anime?filter[text]=${criptomoneda}`;
-
-          // consultar en rest api
-          const urlConvertir = await fetch(url);
-
-          const resultado = await urlConvertir.json();
-
-          return {
-               resultado
+     // search for animes by name/text
+     async searchAnimeByName(searchTerm) {
+          const url = `https://kitsu.io/api/edge/anime?filter[text]=${searchTerm}`;
+          try {
+               const response = await fetch(url);
+               if (!response.ok) {
+                    throw new Error(`Network response was not ok: ${response.statusText} (status: ${response.status})`);
+               }
+               const searchResults = await response.json();
+               return searchResults.data; // Adjusted to return searchResults.data
+          } catch (error) {
+               console.error(`Failed to search anime by name "${searchTerm}":`, error);
+               throw error; // Re-throw to be handled by the caller
           }
      }
 }
-
-
