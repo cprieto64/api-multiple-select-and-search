@@ -161,7 +161,7 @@ class UI {
             return;
         }
 
-        let htmlContent = '';
+        let cardsHtml = ''; // Accumulates HTML for individual cards
         searchResults.forEach(animeItem => {
             const { // Destructuring from animeItem.attributes
                 canonicalTitle: title,
@@ -175,8 +175,8 @@ class UI {
 
             const imageUrl = posterImage && posterImage.large ? posterImage.large : 'placeholder.jpg'; // Added check for posterImage
 
-            htmlContent += `
-                <div class="col-md-4 mb-4"> <!-- Removed style="display: inline-block;" for Bootstrap's grid system -->
+            cardsHtml += `
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
                     <div class="card h-100">
                         <img class="card-img-top" src="${imageUrl}" alt="${title} Poster" style="max-height: 300px; object-fit: cover;">
                         <div class="card-body d-flex flex-column">
@@ -193,7 +193,8 @@ class UI {
                     </div>
                 </div>`;
         });
-        this.resultsContainer.innerHTML = htmlContent;
+        // After the loop, wrap cardsHtml with a row
+        this.resultsContainer.innerHTML = `<div class="row">${cardsHtml}</div>`;
     }
 
     // Clears previous results
